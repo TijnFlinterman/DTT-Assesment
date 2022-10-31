@@ -1,16 +1,12 @@
 using UnityEngine;
-using System.Collections.Generic;
 
-public class MazeCell
+namespace Maze
 {
-    public bool visited;
-    public GameObject topWall, bottomWall, rightWall, leftWall, ground;
-
-    public void DestroyCell()
+    public class MazeCell
     {
-        GameObject.Destroy(topWall);
-        GameObject.Destroy(topWall);
-        GameObject.Destroy(topWall);
-        GameObject.Destroy(topWall);
+        #region Variables
+        public bool visited;
+        public GameObject topWall, bottomWall, rightWall, leftWall, ground;
+        #endregion
     }
 }

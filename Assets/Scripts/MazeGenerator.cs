@@ -1,16 +1,14 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 namespace Maze
 {
     public class MazeGenerator : MonoBehaviour
     {
-        #region variables
+        #region Variables
         // public variables
         [Range(10, 250)]
         public int rows, columns;
         public GameObject wall;
-        public float scale = 1f;
 
         // private variables
         private MazeCell[,] mazeCells;
@@ -20,6 +18,8 @@ namespace Maze
         private void Start()
         {
             InitializeMaze();
+            MazeAlgorithm mazeAlgorithm = new HuntAndKillMazeAlgorithm(mazeCells);
+            mazeAlgorithm.CreateMaze();
         }
         #endregion
 
@@ -34,24 +34,24 @@ namespace Maze
                 {
                     mazeCells[r, c] = new MazeCell();
 
-                    mazeCells[r, c].ground = Instantiate(wall, new Vector3(r * scale, -(scale / 2f), c * scale), Quaternion.identity) as GameObject;
+                    mazeCells[r, c].ground = Instantiate(wall, new Vector3(r * 1, -(1 / 2f), c * 1), Quaternion.identity) as GameObject;
                     mazeCells[r, c].ground.transform.Rotate(Vector3.right, 90f);
 
                     if (c == 0)
                     {
-                        mazeCells[r, c].leftWall = Instantiate(wall, new Vector3(r * scale, 0, (c * scale) - (scale / 2f)), Quaternion.identity) as GameObject;
+                        mazeCells[r, c].leftWall = Instantiate(wall, new Vector3(r * 1, 0, (c * 1) - (1 / 2f)), Quaternion.identity) as GameObject;
                     }
 
 
-                    mazeCells[r, c].rightWall = Instantiate(wall, new Vector3(r * scale, 0, (c * scale) + (scale / 2f)), Quaternion.identity) as GameObject;
+                    mazeCells[r, c].rightWall = Instantiate(wall, new Vector3(r * 1, 0, (c * 1) + (1 / 2f)), Quaternion.identity) as GameObject;
 
                     if (r == 0)
                     {
-                        mazeCells[r, c].topWall = Instantiate(wall, new Vector3((r * scale) - (scale / 2f), 0, c * scale), Quaternion.identity) as GameObject;
+                        mazeCells[r, c].topWall = Instantiate(wall, new Vector3((r * 1) - (1 / 2f), 0, c * 1), Quaternion.identity) as GameObject;
                         mazeCells[r, c].topWall.transform.Rotate(Vector3.up * 90f);
                     }
 
-                    mazeCells[r, c].bottomWall = Instantiate(wall, new Vector3((r * scale) + (scale / 2f), 0, c * scale), Quaternion.identity) as GameObject;
+                    mazeCells[r, c].bottomWall = Instantiate(wall, new Vector3((r * 1) + (1 / 2f), 0, c * 1), Quaternion.identity) as GameObject;
                     mazeCells[r, c].bottomWall.transform.Rotate(Vector3.up * 90f);
                 }
             }
@@ -59,18 +59,20 @@ namespace Maze
         #endregion
         private void DeleteMaze()
         {
-            for (int x = 0; x < mazeCells.GetLength(0); x++)
+            //Seek all object in game to destroy
+            GameObject[] allObjects = GameObject.FindGameObjectsWithTag("Wall");
+            foreach (GameObject obj in allObjects)
             {
-                for (int y = 0; y < mazeCells.GetLength(1); y++)
-                {
-                    mazeCells[x, y].DestroyCell();
-                }
+                Destroy(obj);
             }
         }
         public void GenerateNewMaze()
         {
             DeleteMaze();
             InitializeMaze();
+            //Easy to implement new algorithms
+            MazeAlgorithm mazeAlgorithm = new HuntAndKillMazeAlgorithm(mazeCells);
+            mazeAlgorithm.CreateMaze();
         }
     }
 }
