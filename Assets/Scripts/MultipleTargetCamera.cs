@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,13 +6,18 @@ namespace Maze
     [RequireComponent(typeof(Camera))]
     public class MultipleTargetCamera : MonoBehaviour
     {
-        private Camera cam;
-        private float zoomSize;
+        #region Variables
+        // public variables
         public List<Transform> targets;
         public MazeGenerator mazeGenerator;
         public Vector3 offset;
+        // private variables
+        private Camera cam;
+        private float zoomSize;
+        #endregion
 
-        void Start()
+        #region ActivationMoments
+        private void Start()
         {
             cam = GetComponent<Camera>();
             if (targets.Count == 0)
@@ -27,15 +31,24 @@ namespace Maze
             Move();
             Zoom();
         }
+        #endregion
 
-        void Zoom()
+        #region Move&Zoom
+        private void Move()
+        {
+            targets[1].position = new Vector3(mazeGenerator.rows, 0, mazeGenerator.columns);
+            Vector3 centerPoint = GetCenterPoint();
+            Vector3 newPosition = centerPoint + offset;
+            transform.position = newPosition;
+        }
+        private void Zoom()
         {
 
             if (DistanceX() >= DistanceZ())
             {
                 zoomSize = DistanceX();
             }
-            if(DistanceX() < DistanceZ())
+            if (DistanceX() < DistanceZ())
             {
                 zoomSize = DistanceZ();
             }
@@ -43,7 +56,7 @@ namespace Maze
             cam.orthographicSize = zoomSize / 1.7f;
         }
 
-        float DistanceX()
+        private float DistanceX()
         {
             Bounds bounds = new Bounds(targets[0].position, Vector3.zero);
             for (int i = 0; i < targets.Count; i++)
@@ -52,7 +65,7 @@ namespace Maze
             }
             return bounds.size.x;
         }
-        float DistanceZ()
+        private float DistanceZ()
         {
             Bounds bounds = new Bounds(targets[0].position, Vector3.zero);
             for (int i = 0; i < targets.Count; i++)
@@ -62,15 +75,8 @@ namespace Maze
             return bounds.size.z;
         }
 
-        void Move()
-        {
-            targets[1].position = new Vector3(mazeGenerator.rows, 0, mazeGenerator.columns);
-            Vector3 centerPoint = GetCenterPoint();
-            Vector3 newPosition = centerPoint + offset;
-            transform.position = newPosition;
-        }
 
-        Vector3 GetCenterPoint()
+        private  Vector3 GetCenterPoint()
         {
             if (targets.Count == 1)
             {
@@ -85,5 +91,6 @@ namespace Maze
 
             return bounds.center;
         }
+        #endregion
     }
 }

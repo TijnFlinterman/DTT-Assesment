@@ -15,6 +15,7 @@ namespace Maze
         {
         }
 
+        #region MazeCreation
         public override void CreateMaze()
         {
             HuntAndKill();
@@ -30,6 +31,7 @@ namespace Maze
                 Hunt();
             }
         }
+        #endregion
 
         #region Hunt&Kill
 

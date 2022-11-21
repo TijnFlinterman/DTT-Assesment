@@ -6,7 +6,7 @@ namespace Maze
     {
         #region Variables
         public bool visited;
-        public GameObject topWall, bottomWall, rightWall, leftWall, ground;
+        public GameObject topWall, bottomWall, rightWall, leftWall;
         #endregion
     }
 }

@@ -34,9 +34,6 @@ namespace Maze
                 {
                     mazeCells[r, c] = new MazeCell();
 
-                    mazeCells[r, c].ground = Instantiate(wall, new Vector3(r * 1, -(1 / 2f), c * 1), Quaternion.identity) as GameObject;
-                    mazeCells[r, c].ground.transform.Rotate(Vector3.right, 90f);
-
                     if (c == 0)
                     {
                         mazeCells[r, c].leftWall = Instantiate(wall, new Vector3(r * 1, 0, (c * 1) - (1 / 2f)), Quaternion.identity) as GameObject;
@@ -57,6 +54,8 @@ namespace Maze
             }
         }
         #endregion
+
+        #region DeleteMaze
         private void DeleteMaze()
         {
             //Seek all object in game to destroy
@@ -66,6 +65,9 @@ namespace Maze
                 Destroy(obj);
             }
         }
+        #endregion
+
+        #region GenerateButton
         public void GenerateNewMaze()
         {
             DeleteMaze();
@@ -74,5 +76,6 @@ namespace Maze
             MazeAlgorithm mazeAlgorithm = new HuntAndKillMazeAlgorithm(mazeCells);
             mazeAlgorithm.CreateMaze();
         }
+        #endregion
     }
 }
